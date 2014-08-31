@@ -1,0 +1,57 @@
+"Name"      = 'Boolean Language'
+"Author"    = 'Meziantou'
+"Version"   = '1.0'
+"About"     = 'Boolean Language'
+"Character Mapping" = 'Unicode'
+"Case Sensitive"    = False
+"Start Symbol" = <expression>
+
+! =============================================================================
+! Comments
+! =============================================================================
+
+Comment Start = '/*'
+Comment End   = '*/'
+Comment Line  = '--'
+
+! =============================================================================
+! Terminals
+! =============================================================================
+
+{Identifier Ch Standard} = {Alphanumeric} + [_] + [.]
+{Identifier Ch Extended} = {Printable} - ['['] - [']']
+
+! Examples: Test; [A B]
+Identifier = {Identifier Ch Standard}+ | '['{Identifier Ch Extended}+']'
+Boolean = 'true' | 'false'
+           
+! ============================================================================= 
+! Expressions
+! =============================================================================
+       
+<expression> ::= <andExpression>
+               | <orExpression>
+               | <xorExpression>
+               | <subExpression>
+
+<andExpression> ::= <expression> '&&' <subExpression>
+                  | <expression> 'and' <subExpression>
+
+<orExpression>  ::= <expression> '||' <subExpression>
+                  | <expression> 'or' <subExpression>
+
+<xorExpression> ::= <expression> '^' <subExpression>
+                  | <expression> 'xor' <subExpression>
+                  
+<subExpression> ::= <parentheseExpression>
+                  | <notExpression>
+                  | <value>
+
+<parentheseExpression> ::= '(' <expression> ')'
+
+<notExpression> ::= '!' <subExpression>
+                  | 'not' <subExpression>
+
+<value> ::= Boolean
+          | Identifier
+
